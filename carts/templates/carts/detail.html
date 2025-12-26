@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-5xl mx-auto py-10">
+    <h1 class="text-3xl font-bold mb-8">سبد خرید شما</h1>
+    {% if cart %}
+        <div class="bg-white rounded-3xl shadow-sm overflow-hidden border">
+            <table class="w-full text-right">
+                <thead class="bg-slate-50 border-b">
+                    <tr>
+                        <th class="p-6">محصول</th>
+                        <th class="p-6">تعداد</th>
+                        <th class="p-6">قیمت واحد</th>
+                        <th class="p-6">جمع کل</th>
+                        <th class="p-6">حذف</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y">
+                    {% for item in cart %}
+                    <tr>
+                        <td class="p-6 font-bold">{{ item.book.title }}</td>
+                        <td class="p-6">{{ item.quantity }}</td>
+                        <td class="p-6">{{ item.price }} تومان</td>
+                        <td class="p-6 text-indigo-600 font-bold">{{ item.total_price }} تومان</td>
+                        <td class="p-6">
+                            <a href="{% url 'carts:cart_remove' item.book.id %}" class="text-red-500 hover:bg-red-50 p-2 rounded-lg">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="p-8 bg-slate-50 flex justify-between items-center">
+                <div class="text-xl font-bold">مبلغ نهایی: <span class="text-indigo-600">{{ cart.get_total_price }} تومان</span></div>
+                <a href="{% url 'orders:order_create' %}" class="bg-indigo-600 text-white px-8 py-3 rounded-2xl font-bold hover:bg-indigo-700 transition shadow-lg">ثبت نهایی و پرداخت</a>
+            </div>
+        </div>
+    {% else %}
+        <div class="text-center py-20 bg-white rounded-3xl border">
+            <p class="text-gray-500 mb-6 text-xl">سبد خرید شما فعلاً خالی است.</p>
+            <a href="{% url 'catalog:book_list' %}" class="bg-indigo-600 text-white px-8 py-3 rounded-xl">مشاهده کتاب‌ها</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
